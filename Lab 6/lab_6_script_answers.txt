@@ -1,0 +1,17 @@
+Assignment: https://cscita3308.gitlab.io/lab-instructions/lab6_postgresql/lab6_postgresql.html
+1. Aurangzeb Malik
+2. N/A
+3. 
+
+#1:
+CREATE TABLE IF NOT EXISTS universities
+(
+	university_name VARCHAR(10) NOT NULL,
+	year DATE,
+	address VARCHAR(20),
+	population int,
+	acceptance_rate real
+);
+INSERT INTO universities(university_name, year, address, population, acceptance_rate)
+VALUES('CU Boulder', 1876, '110 28th St, Boulder, CO 80303', 35000, 0.8);
+#2:
