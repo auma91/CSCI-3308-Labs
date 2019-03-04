@@ -4,14 +4,120 @@ Assignment: https://cscita3308.gitlab.io/lab-instructions/lab6_postgresql/lab6_p
 3. 
 
 #1:
-CREATE TABLE IF NOT EXISTS universities
+CREATE TABLE universities
 (
-	university_name VARCHAR(10) NOT NULL,
+	university_name TEXT NOT NULL,
 	year DATE,
-	address VARCHAR(20),
-	population int,
+	address TEXT not NULL,
+	population int NOT NULL,
 	acceptance_rate real
 );
-INSERT INTO universities(university_name, year, address, population, acceptance_rate)
-VALUES('CU Boulder', 1876, '110 28th St, Boulder, CO 80303', 35000, 0.8);
+
 #2:
+INSERT INTO universities(university_name, year, address, population, acceptance_rate)
+VALUES('CU Boulder', to_date('1876', 'YYYY'), '110 28th St, Boulder, CO 80303', 35000, 0.8);
+
+#3
+SELECT name, major from football_players ORDER BY major;
+
+       name        | major 
+-------------------+-------
+ Cedric Vega       | ARTS
+ Wade Farmer       | ARTS
+ Erick Graves      | ARTS
+ Jared Castillo    | ARTS
+ Doyle Huff        | CSCI
+ Myron Walters     | CSCI
+ Charles Porter    | CSCI
+ Melba Pope        | MATH
+ Rafael Boreous    | MATH
+ Javier Washington | MATH
+(10 rows)
+
+#4
+SELECT name, rushing_yards from football_players WHERE rushing_yards>70;
+
+      name      | rushing_yards 
+----------------+---------------
+ Erick Graves   |            78
+ Charles Porter |           102
+ Rafael Boreous |           111
+ Jared Castillo |           113
+(4 rows)
+
+#5
+SELECT * from football_games WHERE visitor_name='Nebraska';
+
+ visitor_name | home_score | visitor_score | game_date  |   players   
+--------------+------------+---------------+------------+-------------
+ Nebraska     |         33 |            28 | 2018-09-08 | {2,3,4,5,6}
+(1 row)
+
+#6
+SELECT * from football_games WHERE home_score>visitor_score;
+
+  visitor_name  | home_score | visitor_score | game_date  |   players   
+----------------+------------+---------------+------------+-------------
+ Colorado State |         45 |            13 | 2018-08-31 | {1,2,3,4,5}
+ Nebraska       |         33 |            28 | 2018-09-08 | {2,3,4,5,6}
+ New Hampshire  |         45 |            14 | 2018-09-15 | {3,4,5,6,7}
+ UCLA           |         38 |            16 | 2018-09-28 | {4,5,6,7,8}
+ Arizona State  |         28 |            21 | 2018-10-06 | {5,6,7,8,9}
+(5 rows)
+
+#7
+SELECT visitor_name, game_date from football_games;
+    visitor_name     | game_date  
+---------------------+------------
+ Colorado State      | 2018-08-31
+ Nebraska            | 2018-09-08
+ New Hampshire       | 2018-09-15
+ UCLA                | 2018-09-28
+ Arizona State       | 2018-10-06
+ Southern California | 2018-10-13
+ Washington          | 2018-10-20
+ Oregon State        | 2018-10-27
+ Arizona             | 2018-11-02
+ Washington State    | 2018-11-10
+ Utah                | 2018-11-17
+ California          | 2018-11-24
+(12 rows)
+ 
+#8
+CREATE VIEW games_won as SELECT COUNT(*) AS games_won FROM football_games WHERE home_score>visitor_score;
+
+ count 
+-------
+     5
+(1 row)
+
+#9
+CREATE VIEW games_played as SELECT COUNT(*) AS total_games FROM football_games;
+
+ count 
+-------
+    12
+(1 row)
+
+#10
+SELECT games_won/CAST(total_games as float) AS percent_Wins FROM games_won, games_played;
+   percent_wins    
+-------------------
+ 0.416666666666667
+(1 row)
+
+#11
+SELECT COUNT(*) FROM football_games WHERE 1 = ANY (players);
+ count 
+-------
+     6
+(1 row)
+
+#12
+CREATE VIEW total_rushing as SELECT SUM(rushing_yards) AS total_rush FROM football_players store WHERE name = 'Cedric Vega';
+CREATE VIEW total_games AS SELECT COUNT(*) AS totalgames FROM football_games WHERE 1 = ANY (players);
+SELECT total_rush/CAST(totalgames as float) AS average_yds FROM total_rushing, total_games;
+   average_yds    
+------------------
+ 4.16666666666667
+(1 row)
