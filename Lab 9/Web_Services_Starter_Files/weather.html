@@ -90,14 +90,15 @@
 
         var string = "";
 
-        for(var i = 0; i < 7; i++) {
+        for(var i = 1; i < 8; i++) {
+          var d = new Date(data.daily.data[i].time * 1000);
           string += '<div class="col-2">' +
             '<div class="card">'+
-              '<img class="card-img-top" src="' + 'img/' + data.daily.data[i+1].icon + '.png"' + '"alt="Card image cap">' +
+              '<img class="card-img-top" src="' + 'img/' + data.daily.data[i].icon + '.png"' + '"alt="Card image cap">' +
               '<div class="card-body">' +
-                '<h5 class="card-title">' + week_names[i] + '</h5>'+
-                '<p class="card-text">High: ' + data.daily.data[i+1].apparentTemperatureHigh + '<br>' +
-                  'Low: ' + data.daily.data[i+1].apparentTemperatureLow + '</p>' +
+                '<h5 class="card-title">' + week_names[d.getDay()] + '</h5>'+
+                '<p class="card-text">High: ' + data.daily.data[i].apparentTemperatureHigh + '<br>' +
+                  'Low: ' + data.daily.data[i].apparentTemperatureLow + '</p>' +
               '</div>' +
             '</div>' +
           '</div>'
